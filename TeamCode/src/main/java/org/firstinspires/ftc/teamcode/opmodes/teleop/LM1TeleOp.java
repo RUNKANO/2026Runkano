@@ -17,7 +17,6 @@ import com.pedropathing.follower.ManualDrive;
 public class LM1TeleOp extends RobotOpMode {
     private Follower follower;
     private boolean fCentric = true;
-    private boolean red = true;
 
     @Override
     public void init(){
@@ -38,7 +37,7 @@ public class LM1TeleOp extends RobotOpMode {
     public void loop(){
         /*
         fix this for whichever side the red and blue are on for field centric before using and the last one is robot centric for if field centric gets off
-        if(red && fCentric){
+        if(OpModeStorage.red && fCentric){
             DrivePowers powers = ManualDrive.fieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
         }else if(fCentric){
             DrivePowers powers = ManualDrive.fieldCentric(gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
@@ -71,7 +70,7 @@ public class LM1TeleOp extends RobotOpMode {
         if(gamepad1.backWasPressed()) fCentric = !fCentric;
 
         if(gamepad1.startWasPressed()){
-            if(!red){
+            if(!OpModeStorage.red){
                 Pose blueCornerPose = new Pose(10.5, 10.5, Math.toRadians(0));
                 follower.setPose(blueCornerPose);
             }else{
@@ -80,7 +79,8 @@ public class LM1TeleOp extends RobotOpMode {
             }
         }
 
-        if(gamepad2.aWasPressed()) red = !red;
+        //in case of alliance being saved incorrectly or for testing
+        if(gamepad2.aWasPressed()) OpModeStorage.red = !OpModeStorage.red;
 
         telemetry.addData("Robot X", robotPose.x());
         telemetry.addData("Robot Y", robotPose.y());

@@ -107,6 +107,7 @@ public class TESTYAUTO extends OpMode {
     @Override
     public void stop() {
         OpModeStorage.autonomousEndPose = follower.pose(); //saves your position in that file
+        OpModeStorage.red = false;
         //we can add any other end state things to OpModeStorage and then also save them at this point if we need any? Probably will be useful for turret position
     }
 }
