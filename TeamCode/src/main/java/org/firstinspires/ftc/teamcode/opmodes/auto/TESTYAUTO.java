@@ -8,11 +8,16 @@ import com.pedropathing.math.Pose;
 
 import org.firstinspires.ftc.teamcode.opmodes.OpModeStorage;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
+
 import static com.pedropathing.api.Paths.*;
 import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.ivy.Command;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.commands.Commands.waitUntil;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
@@ -21,8 +26,8 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static java.util.concurrent.locks.LockSupport.park;
 
 import com.pedropathing.paths.Path;
-@Autonomous
-public class TESTYAUTO extends OpMode {
+@Autonomous(name = "Test Auto", group = "Tests")
+public class TESTYAUTO extends RobotOpMode {
     private Follower follower; // Add this
 
     // our poses
@@ -64,9 +69,13 @@ public class TESTYAUTO extends OpMode {
     public Path path6() {
         return curve(point5, point6Control1, point6).tangent();
     }
-
     private Command autoRoutine() {
         return sequential(
+                instant(() -> robot.flywheel.setTarget(2000)),
+                instant(robot.flywheel::turnOn),
+                robot.intake.on(),
+                waitUntil(robot.flywheel:: atTarget),
+                fire(),
                 follow(follower, path1()),
                 // Add mechanism commands here.
                 follow(follower, path2()),
@@ -80,11 +89,21 @@ public class TESTYAUTO extends OpMode {
                 follow(follower, path6())
         );
     }
+    private Command fire() {
+        return sequential(
+                instant(robot.blocker::unblock),
+                waitMs(1000),
+                instant(robot.blocker::block)
+        );
+    }
 
 
     @Override
     public void init() {
-        Scheduler.reset();
+        super.init();
+
+        robot.blocker.block();
+
         follower = Constants.create(hardwareMap);
         follower.setPose(start);
         follower.update();

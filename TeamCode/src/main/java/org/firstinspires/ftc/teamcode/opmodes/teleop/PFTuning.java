@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-@TeleOp
+@TeleOp(name = "Flywheel PF Turning", group = "Tests")
 public class PFTuning extends OpMode {
     public DcMotorEx fly;
 
-    public double highVelocity = 2800;
+    public double highVelocity = 2600;
     public double lowVelocity = 1400;
     double curTargetVelocity = highVelocity;
 
