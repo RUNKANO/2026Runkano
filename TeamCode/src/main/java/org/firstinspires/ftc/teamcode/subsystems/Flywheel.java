@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class Flywheel {
     private final DcMotorEx flywheelMotor;
     private final Telemetry telemetry;
-    public double target = 2800; //find what this needs to be later, and we can create a function or array for it later
+    public double target = 2000; //find what this needs to be later, and we can create a function or array for it later
     private boolean on = false;
     public static int velocityTolerance = 25;
     public Flywheel(Robot robot){

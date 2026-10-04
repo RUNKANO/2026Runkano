@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class Blocker {
     public static double blockPosition = 0.17; //both this and the unblock pos are wrong
     public static double unblockPosition = 0.28;
-    public static double assemblyPosition = 0;
 
     private final Servo blockerServo;
 
@@ -24,7 +23,4 @@ public class Blocker {
         blockerServo.setPosition(unblockPosition);
     }
 
-    public void assembly() {
-        blockerServo.setPosition(assemblyPosition);
-    }
 }
