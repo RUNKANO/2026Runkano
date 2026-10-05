@@ -102,36 +102,6 @@ public class RedStartingTip extends RobotOpMode {
         OpModeStorage.red = true;
         //we can add any other end state things to OpModeStorage and then also save them at this point if we need any? Probably will be useful for turret position
     }
-    /*
-    @Override
-    public void runOpMode() {
-        Scheduler.reset();
-        follower = Constants.create(hardwareMap);
-        follower.setPose(start);
-        follower.update();
-
-        waitForStart();
-        schedule(autoRoutine());
-
-        while (opModeIsActive()) {
-            follower.update();
-            Scheduler.execute();
-
-            telemetry.addData("x", follower.pose().x());
-            telemetry.addData("y", follower.pose().y());
-            telemetry.addData("heading", follower.pose().heading());
-
-            if (follower.currentPath() != null) {
-                telemetry.addData("Current path distance remaining", follower.distanceToEndpoint());
-                telemetry.addData("Path number", follower.pathIndex());
-            }
-
-            telemetry.update();
-        }
-    }
-
-     */
-
     public Path turnPosition() {
         return line(start, turnPosition).constant(turnPosition);
     }

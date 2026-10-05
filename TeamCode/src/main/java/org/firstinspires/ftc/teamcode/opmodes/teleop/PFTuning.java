@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class PFTuning extends OpMode {
     public DcMotorEx fly;
 
-    public double highVelocity = 2600;
-    public double lowVelocity = 1400;
+    public double highVelocity = 2000;
+    public double lowVelocity = 1000;
     double curTargetVelocity = highVelocity;
 
     double P = 0;
