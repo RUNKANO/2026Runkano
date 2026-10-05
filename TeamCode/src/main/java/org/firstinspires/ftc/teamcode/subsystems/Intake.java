@@ -27,6 +27,7 @@ public class Intake {
     public Intake(Robot robot) {
         intakeMotor1 = robot.hardwareMap.get(DcMotorEx.class, "intake1");
         intakeMotor2 = robot.hardwareMap.get(DcMotorEx.class, "intake2");
+        intakeMotor2.setDirection(DcMotorEx.Direction.REVERSE);
         telemetry = robot.telemetry;
     }
 
@@ -60,7 +61,7 @@ public class Intake {
     public void setPower(double power){
         intakeMotor1.setPower(power);
         intakeMotor2.setPower(power);
-        intakeMotor2.setDirection(DcMotorEx.Direction.REVERSE);
+
     }
     public Command periodic() {
         return infinite(() -> {
