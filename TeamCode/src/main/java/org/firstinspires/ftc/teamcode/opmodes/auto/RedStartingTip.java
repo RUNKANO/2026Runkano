@@ -60,6 +60,7 @@ public class RedStartingTip extends RobotOpMode {
                 robot.intake.on(),
                 fire(),
                 follow(follower, flowerIntake()),
+                waitMs(2000),
                 follow(follower, hiveTip2Cycle2()),
                 fire(),
                 robot.intake.off(),
@@ -98,10 +99,11 @@ public class RedStartingTip extends RobotOpMode {
     }
     @Override
     public void stop() {
-        OpModeStorage.autonomousEndPose = follower.pose(); //saves your position in that file
+        OpModeStorage.autonomousEndPose = follower.pose();
         OpModeStorage.red = true;
         //we can add any other end state things to OpModeStorage and then also save them at this point if we need any? Probably will be useful for turret position
     }
+
     public Path turnPosition() {
         return line(start, turnPosition).constant(turnPosition);
     }
