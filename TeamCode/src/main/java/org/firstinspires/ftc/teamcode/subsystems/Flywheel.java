@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -15,12 +16,13 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class Flywheel {
     private final DcMotorEx flywheelMotor;
     private final Telemetry telemetry;
-    public double target = 2000; //find what this needs to be later, and we can create a function or array for it later
+    public double target = 2300; //find what this needs to be later, and we can create a function or array for it later
     private boolean on = false;
-    public static int velocityTolerance = 25;
+    public static int velocityTolerance = 80;
     public Flywheel(Robot robot){
         flywheelMotor = robot.hardwareMap.get(DcMotorEx.class, "flywheel");
-
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(50, 0, 0, 11);
+        flywheelMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         telemetry = robot.telemetry;
     }
     private double getVelocity() {

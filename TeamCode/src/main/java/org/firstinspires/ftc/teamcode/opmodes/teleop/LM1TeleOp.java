@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -36,39 +37,52 @@ public class LM1TeleOp extends RobotOpMode {
     @Override
     public void loop(){
         /*
-        fix this for whichever side the red and blue are on for field centric before using and the last one is robot centric for if field centric gets off
+        //fix this for whichever side the red and blue are on for field centric before using and the last one is robot centric for if field centric gets off
         if(OpModeStorage.red && fCentric){
             DrivePowers powers = ManualDrive.fieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
+            ManualDrive.driveOrHold(follower, powers);
         }else if(fCentric){
             DrivePowers powers = ManualDrive.fieldCentric(gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
+            ManualDrive.driveOrHold(follower, powers);
         }else{
                     follower.manual(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         }
-         */
-        DrivePowers powers = ManualDrive.fieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
+
+        //DrivePowers powers = ManualDrive.fieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
         if(fCentric) {
-            //follower.manual(powers); <-- this will not hold the position of the robot after the sticks are let go, if we have problems or another driver has a preference remove the comment, I could bind it to a button but guh maybe I'll add it to controller 2 or something
-            ManualDrive.driveOrHold(follower, powers);
+            follower.manual(powers); <-- this will not hold the position of the robot after the sticks are let go, if we have problems or another driver has a preference remove the comment, I could bind it to a button but guh maybe I'll add it to controller 2 or something
         }
+        */
+        double forward = -gamepad1.left_stick_y;
+        double lateral = -gamepad1.left_stick_x;
+        double turn = -gamepad1.right_stick_x;
+        follower.manual(forward, lateral, turn);
         follower.update();
         Pose robotPose = follower.pose();
 
         if(gamepad1.rightTriggerWasPressed()) robot.intake.on().schedule();
         if(gamepad1.rightTriggerWasReleased()) robot.intake.off().schedule();
 
+
         if(gamepad1.leftBumperWasPressed()){
             robot.blocker.unblock();
-            robot.intake.on().schedule();
+            if(robot.flywheel.atTarget()) {
+                robot.intake.on().schedule();
+            }else{
+                robot.intake.off().schedule();
+            }
         }
         if (gamepad1.leftBumperWasReleased()) {
             robot.blocker.block();
             robot.intake.off().schedule();
         }
+        if(gamepad1.dpadUpWasPressed()) robot.flywheel.setTarget(robot.flywheel.target +=20);
+        if(gamepad1.dpadDownWasPressed()) robot.flywheel.setTarget(robot.flywheel.target -=20);
 
         if(gamepad1.bWasPressed()) robot.flywheel.toggle();
 
         if(gamepad1.backWasPressed()) fCentric = !fCentric;
-
+        /*
         if(gamepad1.startWasPressed()){
             if(!OpModeStorage.red){
                 Pose blueCornerPose = new Pose(10.5, 10.5, Math.toRadians(0));
@@ -78,12 +92,15 @@ public class LM1TeleOp extends RobotOpMode {
                 follower.setPose(redCornerPose);
             }
         }
-
+        */
         //in case of alliance being saved incorrectly or for testing
         if(gamepad2.aWasPressed()) OpModeStorage.red = !OpModeStorage.red;
+
+        Scheduler.execute();
 
         telemetry.addData("Robot X", robotPose.x());
         telemetry.addData("Robot Y", robotPose.y());
         telemetry.addData("Robot Heading", Math.toDegrees(robotPose.heading()));
+        telemetry.addData("Flywheel Velocity Target", robot.flywheel.target);
     }
 }

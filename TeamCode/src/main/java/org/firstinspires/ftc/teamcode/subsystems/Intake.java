@@ -27,7 +27,8 @@ public class Intake {
     public Intake(Robot robot) {
         intakeMotor1 = robot.hardwareMap.get(DcMotorEx.class, "intake1");
         intakeMotor2 = robot.hardwareMap.get(DcMotorEx.class, "intake2");
-        intakeMotor2.setDirection(DcMotorEx.Direction.REVERSE);
+        intakeMotor1.setDirection(DcMotorEx.Direction.REVERSE);
+
         telemetry = robot.telemetry;
     }
 
