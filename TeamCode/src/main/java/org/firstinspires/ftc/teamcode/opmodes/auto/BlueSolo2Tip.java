@@ -48,7 +48,6 @@ public class BlueSolo2Tip extends RobotOpMode {
         return sequential(
                 instant(() -> robot.flywheel.setTarget(2000)),
                 instant(robot.flywheel::turnOn),
-                robot.intake.on(),
                 waitUntil(robot.flywheel:: atTarget),
                 fire(),
                 robot.intake.off(),
@@ -74,9 +73,11 @@ public class BlueSolo2Tip extends RobotOpMode {
     }
     private Command fire() {
         return sequential(
+                robot.intake.fire(),
                 instant(robot.blocker::unblock),
                 waitMs(1000),
-                instant(robot.blocker::block)
+                instant(robot.blocker::block),
+                robot.intake.on()
         );
     }
     @Override

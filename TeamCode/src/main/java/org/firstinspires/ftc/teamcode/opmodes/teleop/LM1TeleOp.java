@@ -67,7 +67,7 @@ public class LM1TeleOp extends RobotOpMode {
         if(gamepad1.leftBumperWasPressed()){
             robot.blocker.unblock();
             if(robot.flywheel.atTarget()) {
-                robot.intake.on().schedule();
+                robot.intake.fire().schedule();
             }else{
                 robot.intake.off().schedule();
             }

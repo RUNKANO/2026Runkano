@@ -49,7 +49,6 @@ public class RedStartingTip extends RobotOpMode {
                 instant(() -> robot.flywheel.setTarget(2000)),
                 instant(robot.flywheel::turnOn),
                 waitUntil(robot.flywheel:: atTarget),
-                robot.intake.on(),
                 fire(),
                 robot.intake.off(),
                 follow(follower, turnPosition()),
@@ -60,7 +59,7 @@ public class RedStartingTip extends RobotOpMode {
                 robot.intake.on(),
                 fire(),
                 follow(follower, flowerIntake()),
-                waitMs(2000),
+                waitMs(1000),
                 follow(follower, hiveTip2Cycle2()),
                 fire(),
                 robot.intake.off(),
@@ -70,9 +69,11 @@ public class RedStartingTip extends RobotOpMode {
 
     private Command fire() {
         return sequential(
+                robot.intake.fire(),
                 instant(robot.blocker::unblock),
-                waitMs(1000),
-                instant(robot.blocker::block)
+                waitMs(500),
+                instant(robot.blocker::block),
+                robot.intake.on()
         );
     }
     @Override
