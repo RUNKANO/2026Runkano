@@ -17,7 +17,7 @@ import com.pedropathing.follower.ManualDrive;
 @Config
 public class LM1TeleOp extends RobotOpMode {
     private Follower follower;
-    private boolean fCentric = true;
+    private boolean fCentric = false;
 
     @Override
     public void init(){
@@ -36,68 +36,56 @@ public class LM1TeleOp extends RobotOpMode {
 
     @Override
     public void loop(){
-        /*
+
         //fix this for whichever side the red and blue are on for field centric before using and the last one is robot centric for if field centric gets off
         if(OpModeStorage.red && fCentric){
             DrivePowers powers = ManualDrive.fieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
             ManualDrive.driveOrHold(follower, powers);
+            follower.manual(powers);
         }else if(fCentric){
             DrivePowers powers = ManualDrive.fieldCentric(gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
             ManualDrive.driveOrHold(follower, powers);
+            follower.manual(powers);
         }else{
-                    follower.manual(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            follower.manual(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         }
-
-        //DrivePowers powers = ManualDrive.fieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
-        if(fCentric) {
-            follower.manual(powers); <-- this will not hold the position of the robot after the sticks are let go, if we have problems or another driver has a preference remove the comment, I could bind it to a button but guh maybe I'll add it to controller 2 or something
-        }
-        */
-        double forward = -gamepad1.left_stick_y;
-        double lateral = -gamepad1.left_stick_x;
-        double turn = -gamepad1.right_stick_x;
-        follower.manual(forward, lateral, turn);
-        follower.update();
-        Pose robotPose = follower.pose();
 
         if(gamepad1.rightTriggerWasPressed()) robot.intake.on().schedule();
         if(gamepad1.rightTriggerWasReleased()) robot.intake.off().schedule();
 
-
-        if(gamepad1.leftBumperWasPressed()){
-            robot.blocker.unblock();
-            if(robot.flywheel.atTarget()) {
+        if(gamepad1.left_trigger > .1 && robot.flywheel.atTarget()){
                 robot.intake.fire().schedule();
-            }else{
-                robot.intake.off().schedule();
-            }
-        }
-        if (gamepad1.leftBumperWasReleased()) {
-            robot.blocker.block();
+        }else if(gamepad1.left_trigger >.1){
             robot.intake.off().schedule();
         }
+        if(gamepad1.leftTriggerWasPressed()) robot.blocker.unblock();
+        if (gamepad1.leftTriggerWasReleased()) {
+            robot.blocker.block();
+            if(!(gamepad1.right_trigger > .1)) robot.intake.off().schedule();
+        }
+
         if(gamepad1.dpadUpWasPressed()) robot.flywheel.setTarget(robot.flywheel.target +=20);
         if(gamepad1.dpadDownWasPressed()) robot.flywheel.setTarget(robot.flywheel.target -=20);
 
         if(gamepad1.bWasPressed()) robot.flywheel.toggle();
 
         if(gamepad1.backWasPressed()) fCentric = !fCentric;
-        /*
-        if(gamepad1.startWasPressed()){
-            if(!OpModeStorage.red){
-                Pose blueCornerPose = new Pose(10.5, 10.5, Math.toRadians(0));
-                follower.setPose(blueCornerPose);
-            }else{
-                Pose redCornerPose = new Pose(133.5, 133.5, Math.toRadians(180)); //have to find what the actual position is for the gardens or something
-                follower.setPose(redCornerPose);
-            }
+
+        if(gamepad1.startWasPressed() && OpModeStorage.red){
+                Pose redGardenPose = new Pose(8.5, 8.5, Math.toRadians(270));
+                follower.setPose(redGardenPose);
+        }else if(gamepad1.startWasPressed()){
+            Pose blueGardenPose = new Pose(133.5, 133.5, Math.toRadians(90));
+            follower.setPose(blueGardenPose);
         }
-        */
+
         //in case of alliance being saved incorrectly or for testing
         if(gamepad2.aWasPressed()) OpModeStorage.red = !OpModeStorage.red;
 
+        follower.update();
         Scheduler.execute();
 
+        Pose robotPose = follower.pose();
         telemetry.addData("Robot X", robotPose.x());
         telemetry.addData("Robot Y", robotPose.y());
         telemetry.addData("Robot Heading", Math.toDegrees(robotPose.heading()));

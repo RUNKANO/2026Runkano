@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
+import com.pedropathing.ivy.groups.Groups;
 import com.pedropathing.paths.interpolator.Interpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -11,10 +12,8 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.robot.RobotOpMode;
 
 import static com.pedropathing.api.Paths.*;
+import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.commands.Commands.instant;
-import static com.pedropathing.ivy.commands.Commands.waitMs;
-import static com.pedropathing.ivy.commands.Commands.waitUntil;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
@@ -46,7 +45,7 @@ public class BlueSolo2Tip extends RobotOpMode {
     private Command autoRoutine() {
 
         return sequential(
-                instant(() -> robot.flywheel.setTarget(2000)),
+                instant(() -> robot.flywheel.setTarget(2220)),
                 instant(robot.flywheel::turnOn),
                 waitUntil(robot.flywheel:: atTarget),
                 fire(),
@@ -56,12 +55,12 @@ public class BlueSolo2Tip extends RobotOpMode {
                 follow(follower, garden()),
                 robot.intake.off(),
                 follow(follower, tip2Cycle1()),
-                instant(()-> robot.flywheel.setTarget(1700)),
+                instant(()-> robot.flywheel.setTarget(2160)),
                 waitUntil(robot.flywheel::atTarget),
                 robot.intake.on(),
                 fire(),
                 follow(follower, flowerIntake()),
-                waitMs(2000),
+                waitMs(1000),
                 robot.intake.off(),
                 follow(follower, tip2Cycle2()),
                 waitUntil(robot.flywheel::atTarget),
@@ -75,7 +74,7 @@ public class BlueSolo2Tip extends RobotOpMode {
         return sequential(
                 robot.intake.fire(),
                 instant(robot.blocker::unblock),
-                waitMs(1000),
+                waitMs(500),
                 instant(robot.blocker::block),
                 robot.intake.on()
         );
