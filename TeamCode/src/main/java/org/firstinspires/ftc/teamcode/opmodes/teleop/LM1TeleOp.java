@@ -54,18 +54,18 @@ public class LM1TeleOp extends RobotOpMode {
         if(gamepad1.rightTriggerWasReleased()) robot.intake.off().schedule();
 
         if(gamepad1.aWasPressed()) robot.turret.turretToPos(0);
-        if(gamepad1.yWasPressed()) robot.turret.turretToPos(.5);
+        if(gamepad1.yWasPressed()) robot.turret.turretToPos(.666);
 
-        if(gamepad1.left_trigger > .1 && robot.flywheel.atTarget()){
-                robot.intake.fire().schedule();
-        }else if(gamepad1.left_trigger >.1){
-            robot.intake.off().schedule();
+        if(gamepad1.leftTriggerWasPressed()) {
+            robot.blocker.unblock();
+            robot.intake.fire().schedule();
         }
-        if(gamepad1.leftTriggerWasPressed()) robot.blocker.unblock();
         if (gamepad1.leftTriggerWasReleased()) {
             robot.blocker.block();
             if(!(gamepad1.right_trigger > .1)) robot.intake.off().schedule();
         }
+
+        if(gamepad1.leftBumperWasPressed()) robot.flowerIntake.toggle().schedule();
 
         if(gamepad1.dpadUpWasPressed()) robot.flywheel.setTarget(robot.flywheel.target +=20);
         if(gamepad1.dpadDownWasPressed()) robot.flywheel.setTarget(robot.flywheel.target -=20);

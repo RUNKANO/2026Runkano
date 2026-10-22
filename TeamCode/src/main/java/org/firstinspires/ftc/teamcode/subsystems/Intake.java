@@ -81,7 +81,7 @@ public class Intake {
         return infinite(() -> {
             switch (mode) {
                 case FIRE:
-                    firePower(fastPower);
+                    firePower(-.8);
                     break;
                 case ON:
                     setPower(fastPower);

@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,6 +22,7 @@ public class Flywheel {
     public static int velocityTolerance = 80;
     public Flywheel(Robot robot){
         flywheelMotor = robot.hardwareMap.get(DcMotorEx.class, "flywheel");
+        flywheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(50, 0, 0, 11);
         flywheelMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         telemetry = robot.telemetry;

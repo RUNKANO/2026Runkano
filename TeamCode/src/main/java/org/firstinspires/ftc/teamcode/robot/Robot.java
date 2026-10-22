@@ -14,6 +14,7 @@ public class Robot {
 
     public final Flywheel flywheel;
     public final Turret turret;
+    public final FlowerIntake flowerIntake;
 
 
     public Robot(OpMode opMode) {
@@ -22,6 +23,7 @@ public class Robot {
                 opMode.telemetry,
                 FtcDashboard.getInstance().getTelemetry()
         );
+        flowerIntake = new FlowerIntake(this);
         blocker = new Blocker(this);
         intake = new Intake(this);
         flywheel = new Flywheel(this);
