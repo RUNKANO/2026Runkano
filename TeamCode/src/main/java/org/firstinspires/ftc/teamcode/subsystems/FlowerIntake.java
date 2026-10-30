@@ -43,7 +43,7 @@ public class FlowerIntake {
                     telemetry.addLine("Flower Position Up");
                     break;
                 case DOWN:
-                    setPosition(.3);
+                    setPosition(.45);
                     telemetry.addLine("Flower Position Down");
                     break;
             }

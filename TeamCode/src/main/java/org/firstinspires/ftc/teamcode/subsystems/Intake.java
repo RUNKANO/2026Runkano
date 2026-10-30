@@ -20,7 +20,7 @@ public class Intake {
     public static double servoPower = 1;
     public static double offPower = 0;
     public static double reversePower = 1;
-    public static double shortReverseTimeMs = 150;
+    public static double shortReverseTimeMs = 5000;
 
     private final DcMotorEx intakeMotor1, intakeMotor2;
     private final CRServo intakeServo;
@@ -69,19 +69,25 @@ public class Intake {
     public void setPower(double power){
         intakeMotor1.setPower(power);
         intakeMotor2.setPower(power);
-        intakeServo.setPower(-power);
+        intakeServo.setPower(power);
     }
     public void firePower(double power){
         intakeMotor1.setPower(power);
         intakeMotor2.setPower(power);
-        intakeServo.setPower(power);
+        intakeServo.setPower(-power);
+    }
+    public void reversePower(double power){
+        intakeMotor1.setPower(power);
+        intakeMotor2.setPower(power);
+        intakeServo.setPower(-power);
     }
 
     public Command periodic() {
+
         return infinite(() -> {
             switch (mode) {
                 case FIRE:
-                    firePower(-.8);
+                    firePower(-1);
                     break;
                 case ON:
                     setPower(fastPower);
@@ -90,12 +96,12 @@ public class Intake {
                     setPower(offPower);
                     break;
                 case REVERSE:
-                    setPower(reversePower);
+                    reversePower(reversePower);
                     break;
             }
 
-            telemetry.addData("Intake 1 Current", intakeMotor1.getCurrent(CurrentUnit.MILLIAMPS));
-            telemetry.addData("Intake 2 Current", intakeMotor2.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addData("Intake 1 Milliamps", intakeMotor1.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addData("Intake 2 Milliamps", intakeMotor2.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addData("Intake Velocity", intakeMotor1.getVelocity());
         });
     }

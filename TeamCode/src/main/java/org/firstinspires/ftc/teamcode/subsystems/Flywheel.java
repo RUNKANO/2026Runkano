@@ -17,13 +17,13 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class Flywheel {
     private final DcMotorEx flywheelMotor;
     private final Telemetry telemetry;
-    public double target = 2300; //find what this needs to be later, and we can create a function or array for it later
+    public double target = 2200; //find what this needs to be later, and we can create a function or array for it later
     private boolean on = false;
     public static int velocityTolerance = 80;
     public Flywheel(Robot robot){
         flywheelMotor = robot.hardwareMap.get(DcMotorEx.class, "flywheel");
         flywheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(50, 0, 0, 11);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(62, 0, 0, 12);
         flywheelMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         telemetry = robot.telemetry;
     }
@@ -40,8 +40,6 @@ public class Flywheel {
 
     public void toggle() {
         on = !on;
-        if (on) turnOn();
-        else turnOff();
     }
     public void setTarget(double target){
         this.target = target;
@@ -59,6 +57,7 @@ public class Flywheel {
 
             telemetry.addData("Flywheel Velocity", getVelocity());
             telemetry.addData("Flywheel Target", target);
+            telemetry.addData("Flywheel Milliamps", flywheelMotor.getCurrent(CurrentUnit.MILLIAMPS));
         });
     }
 }
