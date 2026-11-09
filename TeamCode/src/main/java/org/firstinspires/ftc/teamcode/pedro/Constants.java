@@ -58,10 +58,10 @@ public class Constants {
         c.frontRightName.set("fR");
         c.backLeftName.set("bL");
         c.backRightName.set("bR");
-        c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+        c.frontLeftDirection.set(DcMotorSimple.Direction.FORWARD);
         c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
         c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
-        c.backRightDirection.set(DcMotorSimple.Direction.REVERSE);
+        c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
     });
     public static Follower create(HardwareMap h) {
         return new Follower(

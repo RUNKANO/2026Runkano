@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @Config
 public class Blocker {
-    public static double blockPosition = 0.54; //both this and the unblock pos are wrong
-    public static double unblockPosition = 0.8;
+    public static double blockPosition = 0.50; //both this and the unblock pos are wrong
+    public static double unblockPosition = .2;
 
     private final Servo blockerServo;
 

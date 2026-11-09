@@ -45,9 +45,9 @@ public class BlueFar1Tip extends RobotOpMode {
                 fire(),
                 follow(follower, garden()),
                 follow(follower, cycle2()),
-                waitUntil(robot.flywheel::atTarget),
                 fire(),
                 instant(()->robot.intake.off()),
+                instant(robot.flywheel::turnOff),
                 follow(follower, park())
         );
     }

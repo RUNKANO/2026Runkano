@@ -22,7 +22,7 @@ public class Flywheel {
     public static int velocityTolerance = 80;
     public Flywheel(Robot robot){
         flywheelMotor = robot.hardwareMap.get(DcMotorEx.class, "flywheel");
-        flywheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        flywheelMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(62, 0, 0, 12);
         flywheelMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         telemetry = robot.telemetry;

@@ -36,18 +36,18 @@ public class RedFar1Tip extends RobotOpMode {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
-                instant(() -> robot.flywheel.setTarget(2400)),
+                instant(() -> robot.flywheel.setTarget(2200)),
                 instant(robot.flywheel::turnOn),
                 follow(follower, cycle1()),
-                instant(()->robot.turret.turretToPos(((double)130/250))),
+                instant(()->robot.turret.turretToPos(((double)140/250))),
                 waitMs(300),
                 waitUntil(robot.flywheel:: atTarget),
                 fire(),
                 follow(follower, garden()),
                 follow(follower, cycle2()),
-                waitUntil(robot.flywheel::atTarget),
                 fire(),
                 instant(()->robot.intake.off()),
+                instant(robot.flywheel::turnOff),
                 follow(follower, park())
         );
     }
