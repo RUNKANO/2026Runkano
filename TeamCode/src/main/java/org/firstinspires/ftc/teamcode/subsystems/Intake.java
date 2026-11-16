@@ -20,35 +20,33 @@ public class Intake {
     public static double servoPower = 1;
     public static double offPower = 0;
     public static double reversePower = 1;
-    public static double shortReverseTimeMs = 150;
+    public static double shortReverseTimeMs = 5000;
 
     private final DcMotorEx intakeMotor1, intakeMotor2;
-    private final CRServo intakeServo;
 
     private final Telemetry telemetry;
 
     public Intake(Robot robot) {
         intakeMotor1 = robot.hardwareMap.get(DcMotorEx.class, "intake1");
         intakeMotor2 = robot.hardwareMap.get(DcMotorEx.class, "intake2");
-        intakeMotor1.setDirection(DcMotorEx.Direction.REVERSE);
-        intakeServo = robot.hardwareMap.get(CRServo.class, "intake");
+        intakeMotor2.setDirection(DcMotorEx.Direction.REVERSE);
 
         telemetry = robot.telemetry;
     }
 
     public Command on() {
-        return instant(() -> mode = Mode.ON).requiring(intakeMotor1,intakeMotor2,intakeServo);
+        return instant(() -> mode = Mode.ON).requiring(intakeMotor1,intakeMotor2);
     }
 
     public Command off() {
-        return instant(() -> mode = Mode.OFF).requiring(intakeMotor1,intakeMotor2,intakeServo);
+        return instant(() -> mode = Mode.OFF).requiring(intakeMotor1,intakeMotor2);
     }
 
     public Command reverse() {
-        return instant(() -> mode = Mode.REVERSE).requiring(intakeMotor1, intakeMotor2,intakeServo);
+        return instant(() -> mode = Mode.REVERSE).requiring(intakeMotor1, intakeMotor2);
     }
     public Command fire(){
-        return instant(() -> mode = Mode.FIRE).requiring(intakeMotor1, intakeMotor2,intakeServo);
+        return instant(() -> mode = Mode.FIRE).requiring(intakeMotor1, intakeMotor2);
     }
 
     public Command shortReverse() {
@@ -67,21 +65,24 @@ public class Intake {
         slowMode = false;
     }
     public void setPower(double power){
-        intakeMotor1.setPower(power);
-        intakeMotor2.setPower(power);
-        intakeServo.setPower(-power);
+        intakeMotor1.setVelocity(power*2500);
+        intakeMotor2.setVelocity(power*2500);
     }
     public void firePower(double power){
-        intakeMotor1.setPower(power);
-        intakeMotor2.setPower(power);
-        intakeServo.setPower(power);
+        intakeMotor1.setVelocity(power*2500);
+        intakeMotor2.setVelocity(power*2500);
+    }
+    public void reversePower(double power){
+        intakeMotor1.setVelocity(power*2500);
+        intakeMotor2.setVelocity(power*2500);
     }
 
     public Command periodic() {
+
         return infinite(() -> {
             switch (mode) {
                 case FIRE:
-                    firePower(-.8);
+                    firePower(fastPower);
                     break;
                 case ON:
                     setPower(fastPower);
@@ -90,12 +91,12 @@ public class Intake {
                     setPower(offPower);
                     break;
                 case REVERSE:
-                    setPower(reversePower);
+                    reversePower(reversePower);
                     break;
             }
 
-            telemetry.addData("Intake 1 Current", intakeMotor1.getCurrent(CurrentUnit.MILLIAMPS));
-            telemetry.addData("Intake 2 Current", intakeMotor2.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addData("Intake 1 Milliamps", intakeMotor1.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addData("Intake 2 Milliamps", intakeMotor2.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addData("Intake Velocity", intakeMotor1.getVelocity());
         });
     }

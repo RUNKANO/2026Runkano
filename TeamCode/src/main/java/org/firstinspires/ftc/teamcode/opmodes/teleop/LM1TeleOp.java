@@ -39,30 +39,43 @@ public class LM1TeleOp extends RobotOpMode {
 
         //fix this for whichever side the red and blue are on for field centric before using and the last one is robot centric for if field centric gets off
         if(OpModeStorage.red && fCentric){
-            DrivePowers powers = ManualDrive.fieldCentric(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
+            DrivePowers powers = ManualDrive.fieldCentric(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, follower.pose().heading());
             ManualDrive.driveOrHold(follower, powers);
             follower.manual(powers);
         }else if(fCentric){
-            DrivePowers powers = ManualDrive.fieldCentric(gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x, follower.pose().heading());
+            DrivePowers powers = ManualDrive.fieldCentric(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, follower.pose().heading());
             ManualDrive.driveOrHold(follower, powers);
             follower.manual(powers);
         }else{
-            follower.manual(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            follower.manual(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
         }
 
         if(gamepad1.rightTriggerWasPressed()) robot.intake.on().schedule();
         if(gamepad1.rightTriggerWasReleased()) robot.intake.off().schedule();
+        if(gamepad1.dpadLeftWasPressed()) robot.intake.reverse().schedule();
+        if(gamepad1.dpadLeftWasReleased()) robot.intake.off().schedule();
 
-        if(gamepad1.aWasPressed()) robot.turret.turretToPos(0);
-        if(gamepad1.yWasPressed()) robot.turret.turretToPos(.666);
+        if(gamepad1.aWasPressed()) robot.turret.turretToPos(.02);
+        if(gamepad1.xWasPressed()) robot.turret.turretToPos(((double)90/250));
+        if(gamepad1.yWasPressed()) robot.turret.turretToPos(((double)135/250));
+        if(gamepad1.rightBumperWasPressed()) robot.turret.turretToPos(((double)45/250));
 
+
+
+
+
+
+
+
+
+        
         if(gamepad1.leftTriggerWasPressed()) {
             robot.blocker.unblock();
             robot.intake.fire().schedule();
         }
         if (gamepad1.leftTriggerWasReleased()) {
             robot.blocker.block();
-            if(!(gamepad1.right_trigger > .1)) robot.intake.off().schedule();
+            if(!(gamepad1.right_trigger > .15)) robot.intake.off().schedule();
         }
 
         if(gamepad1.leftBumperWasPressed()) robot.flowerIntake.toggle().schedule();
