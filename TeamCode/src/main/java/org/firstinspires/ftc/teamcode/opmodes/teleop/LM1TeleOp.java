@@ -58,7 +58,7 @@ public class LM1TeleOp extends RobotOpMode {
         if(gamepad1.aWasPressed()) robot.turret.turretToPos(.02);
         if(gamepad1.xWasPressed()) robot.turret.turretToPos(((double)90/250));
         if(gamepad1.yWasPressed()) robot.turret.turretToPos(((double)135/250));
-        if(gamepad1.rightBumperWasPressed()) robot.turret.turretToPos(((double)45/250));
+        if(gamepad1.rightBumperWasPressed()) robot.turret.enableTracking();
 
 
 

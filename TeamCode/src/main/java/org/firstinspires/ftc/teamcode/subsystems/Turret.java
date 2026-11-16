@@ -157,6 +157,10 @@ public class Turret {
             if (tracking && follower != null) {
                 turretToPos(computeServoPositionForFieldPoint(trackTarget));
             }
+
+            telemetry.addData("Target X", trackTargetX);
+            telemetry.addData("Target Y", trackTargetY);
+            telemetry.addData("Tracked Position", computeServoPositionForFieldPoint(trackTarget));
         });
     }
 }
