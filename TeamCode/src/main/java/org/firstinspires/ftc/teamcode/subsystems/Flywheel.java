@@ -15,17 +15,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 @Config
 public class Flywheel {
-    private final DcMotorEx flywheelMotor;
+    private final DcMotorEx flywheelMotor, flywheelMotor2;
     private final Telemetry telemetry;
     public double target = 2200; //find what this needs to be later, and we can create a function or array for it later
     private boolean on = false;
     public static int velocityTolerance = 80;
+    public static double kP = 0.004;
+    public static double kI = 0;
+    public static double kD = 0;
+    public static double kF = 0.00038;
+    PIDFController pidfController = new PIDFController(kP,kI,kD,kF);
     public Flywheel(Robot robot){
         flywheelMotor = robot.hardwareMap.get(DcMotorEx.class, "flywheel");
         flywheelMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(62, 0, 0, 12);
-        flywheelMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+        flywheelMotor2 = robot.hardwareMap.get(DcMotorEx.class, "flywheel2");
+        flywheelMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
         telemetry = robot.telemetry;
+    }
+    private void setPower(){
+         flywheelMotor.setPower(pidfController.calculate(target, getVelocity()));
+         flywheelMotor2.setPower(pidfController.calculate(target, getVelocity()));
     }
     private double getVelocity() {
         return flywheelMotor.getVelocity();
@@ -50,14 +59,15 @@ public class Flywheel {
     public Command periodic() {
         return infinite(() -> {
             if (on) {
-                flywheelMotor.setVelocity(target);
+                setPower();
             } else {
-               flywheelMotor.setVelocity(0);
+                flywheelMotor.setPower(0);
+                flywheelMotor2.setPower(0);
             }
 
             telemetry.addData("Flywheel Velocity", getVelocity());
             telemetry.addData("Flywheel Target", target);
-            telemetry.addData("Flywheel Milliamps", flywheelMotor.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addData("Flywheel Milliamps", flywheelMotor.getCurrent(CurrentUnit.MILLIAMPS)+flywheelMotor2.getCurrent(CurrentUnit.MILLIAMPS));
         });
     }
 }
