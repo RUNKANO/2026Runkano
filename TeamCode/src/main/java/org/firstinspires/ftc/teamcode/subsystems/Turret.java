@@ -26,6 +26,8 @@ public class Turret {
     public static double TURRET_TOTAL_TRAVEL_DEG = 250;
     public static boolean TURRET_CW_POSITIVE = true;
     public static Pose TRACK_TARGET_DEFAULT = new Pose(135, 142, 0);
+    public static Pose RELOCALIZE_POSITION_1 = new Pose(0, 0, 0);
+    public static Pose RELOCALIZE_POSITION_2 = new Pose(0, 0, 0);
     public double trackTargetX;
     public double trackTargetY;
     Pose trackTarget = TRACK_TARGET_DEFAULT;
@@ -104,6 +106,7 @@ public class Turret {
         return best;
     }
 
+    // clockwise angle between TURRETS pos and target
     public double robotRelativeBearingRadTo(Pose target) {
         if (follower == null) return 0;
         Pose robotPose = follower.pose();
@@ -148,7 +151,26 @@ public class Turret {
         setTrackTarget(target);
         enableTracking();
     }
+    ///
+    /// Relocalize
+    ///
+    // Snaps the robots pose to a known field position (like lined up against a wall)
+    public void relocalizeTo(Pose pose) {
+        if (follower != null) {
+            follower.setPose(pose);
+        }
+    }
 
+    public void relocalizeToPosition1() {
+        relocalizeTo(RELOCALIZE_POSITION_1);
+    }
+
+    public void relocalizeToPosition2() {
+        relocalizeTo(RELOCALIZE_POSITION_2);
+    }
+    ///
+    /// Big Daddy
+    ///
     public Command periodic() {
         return infinite(()-> {
             trackTargetX = trackTarget.x();
