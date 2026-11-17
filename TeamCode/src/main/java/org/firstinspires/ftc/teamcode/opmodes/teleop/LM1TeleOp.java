@@ -78,15 +78,15 @@ public class LM1TeleOp extends RobotOpMode {
         if(gamepad1.backWasPressed()) fCentric = !fCentric;
 
         if(gamepad1.startWasPressed() && OpModeStorage.red){
-                Pose redGardenPose = new Pose(8.5, 8.5, Math.toRadians(270));
-                robot.turret.follower.setPose(redGardenPose);
+            robot.turret.relocalizeToRedGarden();
         }else if(gamepad1.startWasPressed()){
-            Pose blueGardenPose = new Pose(133.5, 133.5, Math.toRadians(90));
-            robot.turret.follower.setPose(blueGardenPose);
+            robot.turret.relocalizeToBlueGarden();
         }
 
         //in case of alliance being saved incorrectly or for testing
-        if(gamepad2.aWasPressed()) OpModeStorage.red = !OpModeStorage.red;
+        if(gamepad2.yWasPressed()) OpModeStorage.red = !OpModeStorage.red;
+
+        if(gamepad2.aWasPressed()) robot.turret.swapHive();
 
         robot.turret.follower.update();
         Scheduler.execute();

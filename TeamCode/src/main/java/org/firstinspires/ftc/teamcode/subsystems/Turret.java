@@ -6,9 +6,11 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.opmodes.OpModeStorage;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @Config
@@ -26,14 +28,19 @@ public class Turret {
     public static double TURRET_TOTAL_TRAVEL_DEG = 250;
     public static boolean TURRET_CW_POSITIVE = false;
     public static Pose TRACK_TARGET_DEFAULT = new Pose(135, 142, 0);
-    public static Pose RELOCALIZE_POSITION_1 = new Pose(0, 0, 0);
-    public static Pose RELOCALIZE_POSITION_2 = new Pose(0, 0, 0);
+    public static Pose RED_HIVE_GARDEN = new Pose(57, 52, 0);
+    public static Pose RED_HIVE_FLOWER = new Pose(58, 88, 0);
+    public static Pose BLUE_HIVE_GARDEN = new Pose(84, 52, 0);
+    public static Pose BLUE_HIVE_FLOWER = new Pose(84, 88, 0);
+    public static Pose RELOCALIZATION_RED_GARDEN = new Pose(9, 9, 270);
+    public static Pose RELOCALIZATION_BLUE_GARDEN = new Pose(135, 135, 90);
     public double trackTargetX;
     public double trackTargetY;
     Pose trackTarget = TRACK_TARGET_DEFAULT;
     public Follower follower;
     public boolean targetInDeadZone = false;
     private boolean tracking = false;
+    private boolean hiveAudienceSide = false;
 
     public Turret(Robot robot) {
         turretServo1 = robot.hardwareMap.get(Servo.class, "turret1");
@@ -161,12 +168,29 @@ public class Turret {
         }
     }
 
-    public void relocalizeToPosition1() {
-        relocalizeTo(RELOCALIZE_POSITION_1);
+    public void relocalizeToRedGarden(){
+        relocalizeTo(RELOCALIZATION_RED_GARDEN);
     }
 
-    public void relocalizeToPosition2() {
-        relocalizeTo(RELOCALIZE_POSITION_2);
+    public void relocalizeToBlueGarden(){
+        relocalizeTo(RELOCALIZATION_BLUE_GARDEN);
+    }
+
+    public void swapHive() {
+        hiveAudienceSide = !hiveAudienceSide;
+        if (hiveAudienceSide) {
+            if (OpModeStorage.red) {
+                setTrackTarget(RED_HIVE_GARDEN);
+            } else {
+                setTrackTarget(BLUE_HIVE_GARDEN);
+            }
+        } else {
+            if (OpModeStorage.red) {
+                setTrackTarget(RED_HIVE_FLOWER);
+            } else {
+                setTrackTarget(BLUE_HIVE_FLOWER);
+            }
+        }
     }
     ///
     /// Big Daddy
