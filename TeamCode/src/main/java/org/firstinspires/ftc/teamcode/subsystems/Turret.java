@@ -18,18 +18,18 @@ public class Turret {
     private final Telemetry telemetry;
     private static final double MM_TO_IN = 1.0 / 25.4;
     // turret's offset from the robot's center along the robot's FORWARD axis (inches, +forward)
-    public static double TURRET_OFFSET_FORWARD_IN = 0 * MM_TO_IN;
+    public static double TURRET_OFFSET_FORWARD_IN = -25 * MM_TO_IN;
     // turret's offset from the robot's center along the robot's LATERAL axis (inches, +left)
     public static double TURRET_OFFSET_LATERAL_IN = 0 * MM_TO_IN;
     public double turretAngleCWDeg;
     public static double TURRET_FORWARD_SERVO_POS = 0;
     public static double TURRET_TOTAL_TRAVEL_DEG = 250;
-    public static boolean TURRET_CW_POSITIVE = true;
+    public static boolean TURRET_CW_POSITIVE = false;
     public static Pose TRACK_TARGET_DEFAULT = new Pose(135, 142, 0);
     public double trackTargetX;
     public double trackTargetY;
     Pose trackTarget = TRACK_TARGET_DEFAULT;
-    Follower follower;
+    public Follower follower;
     public boolean targetInDeadZone = false;
     private boolean tracking = false;
 
@@ -43,8 +43,8 @@ public class Turret {
     }
 
     public void turretToPos(double position){
-        turretServo1.setPosition(position);
-        turretServo2.setPosition(position);
+        turretServo1.setPosition(1-position);
+        turretServo2.setPosition(1-position);
     }
     ///
     /// Angle Servo Conversions
@@ -161,6 +161,7 @@ public class Turret {
             telemetry.addData("Target X", trackTargetX);
             telemetry.addData("Target Y", trackTargetY);
             telemetry.addData("Tracked Position", computeServoPositionForFieldPoint(trackTarget));
+            telemetry.addData("tracking",tracking);
         });
     }
 }

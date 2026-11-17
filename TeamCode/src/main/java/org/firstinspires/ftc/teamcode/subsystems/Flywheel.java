@@ -23,7 +23,7 @@ public class Flywheel {
     public static double kP = 0.004;
     public static double kI = 0;
     public static double kD = 0;
-    public static double kF = 0.00038;
+    public static double kF = 0.00036;
     PIDFController pidfController = new PIDFController(kP,kI,kD,kF);
     public Flywheel(Robot robot){
         flywheelMotor = robot.hardwareMap.get(DcMotorEx.class, "flywheel");
