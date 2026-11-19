@@ -69,6 +69,7 @@ public class BlueSolo2Tip extends RobotOpMode {
                 fire(),
                 follow(follower, flowerIntake2()),
                 follow(follower, insuranceCycle()),
+                instant(()->robot.turret.turretToPos(1-(double)130/250)),
                 fire(),
                 follow(follower, park())
         );
